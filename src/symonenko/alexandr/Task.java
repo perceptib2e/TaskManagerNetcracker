@@ -7,12 +7,8 @@ public class Task {
     private int end;
     private int interval;
     private boolean active;
-    private int current;
 
-    public void checkTime () throws CustomExeption{
-        if (time < 0 || start < 0 || end < 0 || interval < 0)throw new CustomExeption("Time cannot be of negative value.");
-    }
-
+    //constructors
     public Task(String title, int time) throws CustomExeption {
         this.title = title;
         this.time = time;
@@ -41,6 +37,10 @@ public class Task {
         this.interval = interval;
         this.active = active;
         checkTime();
+    }
+
+    public void checkTime () throws CustomExeption{
+        if (time < 0 || start < 0 || end < 0 || interval < 0)throw new CustomExeption("Time cannot be of negative value.");
     }
 
     public String getTitle() {
@@ -96,51 +96,56 @@ public class Task {
     }
 
     public int nextTimeAfter(int current) {
-//1. если задача неактивна - возвращаем сразу -1
+        //1. если задача неактивна - возвращаем сразу -1
         if (!active) {
             return -1;
         }
-//2. если конец повторяющейся задачи меньше заданного времени - сразу -1
+        //2. если конец повторяющейся задачи меньше заданного времени - сразу -1
         if (current > end & interval > 0) {
             return -1;
         }
-//3. если время неповторяющейся задачи меньше заданного - сразу -1
-//4. вовзращаем время для неповторяющейся задачи
+        //3. если время неповторяющейся задачи меньше заданного - сразу -1
+        //4. вовзращаем время для неповторяющейся задачи
         if (time > 0) {
             return current < time ? time : -1;
         }
-//5. высчитываем время для повторяющейся
-
+        //5. высчитываем время для повторяющейся
         for (int x = start; x <= end; x = x + interval) {
             if (x > current) return x;
         }
-
         return -1;
     }
 
+    //equals for Task class objects
     @Override
     public boolean equals(Object object){
+        if (object == null)
+            return false;
         if (!this.getClass().equals(object.getClass()))
             return false;
         if (this == object) {
             return true;
         }
-        if (this.getClass().equals(object.getClass()))
-            return (this.title.equals(object.title) && this.time == object.time && this.start == object.start && this.end == object.end && this.interval == object.interval);
+        if (getClass().equals(object.getClass())){
+            Task other = (Task) object;
+            return (title.equals(other.title) && time == other.time && interval == other.interval);
+        }
         else return false;
     }
 
+    //hashCode for Task class objects
     @Override
-    public int hashCode() {
+    public int hashCode(){
         int code;
-        code = 31* (title.hashCode() + time + start + end + interval);
+        code = 31* (title.hashCode() + time + interval);
         return code;
     }
 
+    //toString for Task class objects
     @Override
     public String toString() {
         String str = "";
-        if (interval == 0) {
+        if (interval == 0){
             str = "taskinfo: title - \"" + title + "\", time - " + time;
             if (isActive()) str = str + " (active).";
             else str = str + "(not active).";
