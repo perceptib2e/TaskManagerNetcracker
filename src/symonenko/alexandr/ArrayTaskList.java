@@ -41,8 +41,7 @@ public class ArrayTaskList extends TaskList {
                     System.out.println("TURNING \'" + arrayTaskList[j].getTitle() + "\' -> INTO -> \'" + arrayTaskList[j + 1].getTitle() + "\'");
                     arrayTaskList[j] = arrayTaskList[j + 1];
                 }
-                size--;
-                arrayTaskList[size] = null;
+                arrayTaskList[--size] = null;
                 return true;
             }
         }

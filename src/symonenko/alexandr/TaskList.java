@@ -21,20 +21,7 @@ public abstract class TaskList implements Iterable<Task> {
     //methods with body
 
     public void taskNotNullCheck(Task task) throws IllegalStateException {
-        if (task.getTitle() == null) throw new IllegalStateException("No task there.");
-    }
-
-    //returns list of tasks from selected time range
-    public TaskList incoming(int from, int to) throws CustomExeption {
-
-        TaskList arInnerTasks = new ArrayTaskList();
-        for (int i = 0; i < TaskList.this.size(); i++) {
-            if (TaskList.this.getTask(i).nextTimeAfter(from) == -1) continue;
-            if (TaskList.this.getTask(i).nextTimeAfter(from) <= to) {
-                arInnerTasks.add(TaskList.this.getTask(i));
-            }
-        }
-        return arInnerTasks;
+        if (task == null) throw new IllegalStateException("No task there.");
     }
 
     //equals for all subclasses
@@ -51,7 +38,7 @@ public abstract class TaskList implements Iterable<Task> {
         if (this.size() != other.size()) return false;
 
         for (Task t : other) {
-            if (!iterator.next().equals(t)) return false;
+            if (!(iterator.next().equals(t))) return false;
         }
         return true;
     }
@@ -59,16 +46,9 @@ public abstract class TaskList implements Iterable<Task> {
     //hashCode for tasklists
     @Override
     public int hashCode() {
-        int code = 0;
-        if (this instanceof ArrayTaskList){
-            for(Task a : this){
-                code = code + a.hashCode();
-            }
-        }
-        if (this instanceof LinkedTaskList){
-            for(Task a : this){
-                code = code + a.hashCode();
-            }
+        int code = 1;
+        for(Task a : this){
+            code = code + a.hashCode();
         }
         return code;
     }
