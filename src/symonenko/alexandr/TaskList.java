@@ -1,22 +1,23 @@
 package symonenko.alexandr;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
-public abstract class TaskList implements Iterable<Task> {
+public abstract class TaskList implements Iterable<Task>, Serializable {
 
     protected int size;
 
     //abstract methods
 
-    abstract void add(Task task) throws CustomExeption;
+    abstract void add(Task task) throws CustomExсeption;
 
-    abstract boolean remove(Task task) throws CustomExeption;
+    abstract boolean remove(Task task) throws CustomExсeption;
 
     abstract int size();
 
-    abstract Task getTask(int index) throws CustomExeption;
+    abstract Task getTask(int index) throws CustomExсeption;
 
-    abstract void getTaskCHECK(int index) throws CustomExeption;
+    abstract void getTaskCHECK(int index) throws CustomExсeption;
 
     //methods with body
 

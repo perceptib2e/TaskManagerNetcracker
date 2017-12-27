@@ -1,6 +1,8 @@
 package symonenko.alexandr;
 
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.io.Serializable;
 
 public class Task {
     private String title = "T A S K";
@@ -11,20 +13,20 @@ public class Task {
     private boolean active;
 
     //constructors
-    public Task(String title, Date time) throws CustomExeption {
+    public Task(String title, Date time) throws CustomExсeption {
         this.title = title;
         this.time = time;
         checkTime();
     }
 
-    public Task(String title, Date time, boolean active) throws CustomExeption{
+    public Task(String title, Date time, boolean active) throws CustomExсeption{ // опечатка, кирилица в названии или еще что-то
         this.title = title;
         this.time = time;
         this.active = active;
         checkTime();
     }
 
-    public Task(String title, Date start, Date end, int interval) throws CustomExeption {
+    public Task(String title, Date start, Date end, int interval) throws CustomExсeption {
         this.title = title;
         this.start = start;
         this.end = end;
@@ -32,7 +34,7 @@ public class Task {
         checkTime();
     }
 
-    public Task(String title, Date start, Date end, int interval, boolean active) throws CustomExeption {
+    public Task(String title, Date start, Date end, int interval, boolean active) throws CustomExсeption {
         this.title = title;
         this.start = start;
         this.end = end;
@@ -41,18 +43,18 @@ public class Task {
         checkTime();
     }
 
-    public void checkTime() throws CustomExeption{
+    public void checkTime() throws CustomExсeption{
 
         //for non-repetitive tasks
         if (this.interval == 0){
             if (this.time.compareTo(new Date(0)) < 0){
-                throw new CustomExeption("Time cannot be < 0");
+                throw new CustomExсeption("Time cannot be < 0");
             }
         }
         //for repetitive tasks
         if (this.interval != 0){
             if (this.start.before(new Date(0)) || this.end.before(new Date(0)) || this.interval < 0){
-                throw new CustomExeption("Time cannot be < 0");
+                throw new CustomExсeption("Time cannot be < 0");
             }
         }
     }
@@ -127,7 +129,7 @@ public class Task {
 
     public Date nextTimeAfter(Date current) {
         if (current == null) throw new IllegalArgumentException("Chosen date is NULL!");
-        if (!active) throw new IllegalArgumentException("Chosen date is NULL111111111111111111111111111!");
+        if (!active) return null;
         if (!isRepeated() && isActive() && getTime().after(current)) return getTime();
         if (isRepeated() && isActive() && getEndTime().after(current)) {
             Date temp = (Date) getStartTime().clone();
@@ -135,7 +137,8 @@ public class Task {
                 temp.setTime(temp.getTime() + getRepeatInterval()*1000);
                 if (temp.after(end)) return null;
             } return temp;
-        } return null;
+        }
+        return null;
     }
 
     //equals for Task class objects
@@ -170,34 +173,68 @@ public class Task {
         int code = 0;
         if (interval == 0){
             code = 31* (title.hashCode() + time.hashCode());
-                if (active){
-                    code = code + 1;
-                }
+            if (active){
+                code = code + 1;
+            }
         }
         else {
             code = 31* (title.hashCode() + start.hashCode() + end.hashCode() + interval);
-                if (active){
-                    code = code + 1;
-                }
+            if (active){
+                code = code + 1;
+            }
         }
         return code;
     }
 
+    //старый вариант
+
+//    @Override
+//    public String toString() {
+//        String str = "";
+//        if (interval != 0){
+//            str = "\"" + title + "\", start - " + start + ", end - " + end + ", interval - " + makeDate(interval);
+//            if (isActive()) str = str + " (active).";
+//            else str = str + "(not active).";
+//        }
+//        else {
+//            str = "\"" + title + "\", time - " + time;
+//            if (isActive()) str = str + " (active).";
+//            else str = str + " (not active).";
+//        }
+//
+//        return str;
+//    }
+
     //toString for Task class objects
     @Override
     public String toString() {
-        String str = "";
-        if (interval != 0){
-            str = "taskinfo: title - \"" + title + "\", start - " + start + ", end - " + end + ", interval - " + interval;
-            if (isActive()) str = str + " (active).";
-            else str = str + "(not active).";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("[y-MM-dd HH:mm:ss.S]");
+        String ifNotActive = "";
+        if (!isActive()) ifNotActive = " inactive";
+        if(isRepeated()) {
+            return "\"" + title + "\" from " + dateFormat.format(getStartTime()) + " to "
+                    + dateFormat.format(getEndTime()) + " every [" + makeDate(getRepeatInterval()) + "]" + ifNotActive;
+        } else {
+            return "\"" + title + "\" at " + dateFormat.format(getTime()) + ifNotActive;
         }
-        else {
-            str = "taskinfo: title - \"" + title + "\", time - " + time;
-            if (isActive()) str = str + " (active).";
-            else str = str + "(not active).";
-        }
+    }
 
-        return str;
+    public String makeDate(int inter){
+        Date date = new Date((long) inter * 1000);
+        long milisecs = date.getTime();
+        long days = milisecs / 86400000;
+        long hours = (milisecs % 86400000) / 3600000;
+        long mins = ((milisecs % 86400000) % 3600000) / 60000;
+        long secs = (((milisecs % 86400000) % 3600000) % 60000) / 1000;
+
+        String d = days == 1 ? " day " : " days ";
+        String h = hours == 1 ? " hour " : " hours ";
+        String m = mins == 1 ? " minute " : " minutes ";
+        String s = secs == 1 ? " second" : " seconds";
+
+        if (days == 0) return hours + h + mins + m + secs + s;
+        if (days == 0 && hours == 0) return mins + m + secs + s;
+        return days + d + hours + h + mins + m + secs + s;
+
     }
 }
