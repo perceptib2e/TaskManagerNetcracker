@@ -4,7 +4,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.io.Serializable;
 
-public class Task {
+public class Task implements Cloneable, Serializable{
     private String title = "T A S K";
     private Date time;
     private Date start;
@@ -12,14 +12,14 @@ public class Task {
     private int interval;
     private boolean active;
 
-    //constructors
+    /* constructors */
     public Task(String title, Date time) throws CustomExсeption {
         this.title = title;
         this.time = time;
         checkTime();
     }
 
-    public Task(String title, Date time, boolean active) throws CustomExсeption{ // опечатка, кирилица в названии или еще что-то
+    public Task(String title, Date time, boolean active) throws CustomExсeption{
         this.title = title;
         this.time = time;
         this.active = active;
@@ -59,6 +59,7 @@ public class Task {
         }
     }
 
+    /* getters and setters */
     public String getTitle() {
         return title;
     }
@@ -67,20 +68,16 @@ public class Task {
         this.title = title;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
     public void setActive(boolean active) {
         this.active = active;
     }
 
-    //returning time or starting time (if task is repeatable) #1
+    /* returning time or starting time (if task is repeatable) #1 */
     public Date getTime() {
         return (this.interval != 0) ? start : time;
     }
 
-    //setting time, and canceling repeating (if it was)
+    /* setting time, and canceling repeating (if it was) */
     public void setTime(Date time) {
         if (this.interval != 0) {
             this.time = time;
@@ -94,7 +91,7 @@ public class Task {
         }
     }
 
-    //returning time or starting time (if task repeats) #2
+    /* returning time or starting time (if task repeats) #2 */
     public Date getStartTime() {
         if (this.interval == 0) {
             return time;
@@ -103,14 +100,14 @@ public class Task {
         }
     }
 
-    //setting start,end and interval for the task that repeats
+    /* setting start,end and interval for the task that repeats */
     public void setTime(Date start, Date end, int interval) {
         this.start = start;
         this.end = end;
         this.interval = interval;
     }
 
-    //returning time or ending time (if task repeats)
+    /* returning time or ending time (if task repeats) */
     public Date getEndTime() {
         return this.interval != 0 ? end : time;
     }
@@ -122,10 +119,13 @@ public class Task {
         else return 0;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     public boolean isRepeated() {
         return this.interval > 0;
     }
-
 
     public Date nextTimeAfter(Date current) {
         if (current == null) throw new IllegalArgumentException("Chosen date is NULL!");
@@ -141,7 +141,7 @@ public class Task {
         return null;
     }
 
-    //equals for Task class objects
+    /* equals for Task class objects */
     @Override
     public boolean equals(Object object){
         if (object == null)
@@ -167,7 +167,7 @@ public class Task {
         return false;
     }
 
-    //hashCode for Task class objects
+    /* hashCode for Task class objects */
     @Override
     public int hashCode(){
         int code = 0;
@@ -186,26 +186,7 @@ public class Task {
         return code;
     }
 
-    //старый вариант
-
-//    @Override
-//    public String toString() {
-//        String str = "";
-//        if (interval != 0){
-//            str = "\"" + title + "\", start - " + start + ", end - " + end + ", interval - " + makeDate(interval);
-//            if (isActive()) str = str + " (active).";
-//            else str = str + "(not active).";
-//        }
-//        else {
-//            str = "\"" + title + "\", time - " + time;
-//            if (isActive()) str = str + " (active).";
-//            else str = str + " (not active).";
-//        }
-//
-//        return str;
-//    }
-
-    //toString for Task class objects
+    /* toString for Task class objects */
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("[y-MM-dd HH:mm:ss.S]");
@@ -219,6 +200,7 @@ public class Task {
         }
     }
 
+    /* method for transfer int interval to Date */
     public String makeDate(int inter){
         Date date = new Date((long) inter * 1000);
         long milisecs = date.getTime();
@@ -235,6 +217,5 @@ public class Task {
         if (days == 0) return hours + h + mins + m + secs + s;
         if (days == 0 && hours == 0) return mins + m + secs + s;
         return days + d + hours + h + mins + m + secs + s;
-
     }
 }

@@ -7,7 +7,7 @@ public abstract class TaskList implements Iterable<Task>, Serializable {
 
     protected int size;
 
-    //abstract methods
+    /* abstract methods */
 
     abstract void add(Task task) throws CustomExсeption;
 
@@ -19,13 +19,13 @@ public abstract class TaskList implements Iterable<Task>, Serializable {
 
     abstract void getTaskCHECK(int index) throws CustomExсeption;
 
-    //methods with body
+    /* methods with body */
 
     public void taskNotNullCheck(Task task) throws IllegalStateException {
         if (task == null) throw new IllegalStateException("No task there.");
     }
 
-    //equals for all subclasses
+    /* equals for all subclasses */
     @Override
     public boolean equals(Object taskList) {
         if (taskList == null) return false;
@@ -44,7 +44,7 @@ public abstract class TaskList implements Iterable<Task>, Serializable {
         return true;
     }
 
-    //hashCode for tasklists
+    /* hashCode for tasklists */
     @Override
     public int hashCode() {
         int code = 1;

@@ -11,14 +11,12 @@ public class ArrayTaskList extends TaskList {
     Long time list (remove method is rare)
     * */
 
-    //constructors
-
+    /* constructors */
     public ArrayTaskList(int len) {
         this.arrayTaskList = new Task[len];
     }
 
     public ArrayTaskList() {
-
     }
 
     @Override
@@ -45,32 +43,33 @@ public class ArrayTaskList extends TaskList {
                 return true;
             }
         }
-        System.out.println("symonenko.alexandr.Task " + task.getTitle() + " is absent in symonenko.alexandr.ArrayTaskList.");
+        System.out.println("Task " + task.getTitle() + " is absent in ArrayTaskList.");
         return false;
     }
 
-    //returns amount of tasks in list
+    /* returns amount of tasks in list */
     @Override
     public int size() {
         return size;
     }
 
-    //returns task on "index" position
+    /* returns task on "index" position */
     @Override
     public Task getTask(int index) throws IndexOutOfBoundsException {
         getTaskCHECK(index);
         return arrayTaskList[index];
     }
 
+    /* check for task list */
     @Override
     public void getTaskCHECK(int index) throws IndexOutOfBoundsException {
         if (index > arrayTaskList.length)
-            throw new IndexOutOfBoundsException("symonenko.alexandr.Task in " + index + " cell is out of Array bounds. Current Array size is " + arrayTaskList.length + ".");
+            throw new IndexOutOfBoundsException("Task in " + index + " cell is out of Array bounds. Current Array size is " + arrayTaskList.length + ".");
         if (arrayTaskList[index] == null)
-            throw new IndexOutOfBoundsException("symonenko.alexandr.Task in " + index + " cell is null");
+            throw new IndexOutOfBoundsException("Task in " + index + " cell is null");
     }
 
-    //iterator
+    /* iterator */
     @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {

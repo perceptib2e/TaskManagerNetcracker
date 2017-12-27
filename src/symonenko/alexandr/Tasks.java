@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Tasks {
 
-    //returns list of tasks from selected time range
+    /* returns list of tasks from selected time range */
     public static Iterable<Task> incoming(Iterable<Task> tasks, Date start, Date end) throws CustomExсeption {
 
         TaskList arOfTasks = new ArrayTaskList();
@@ -15,6 +15,7 @@ public class Tasks {
         return arOfTasks;
     }
 
+    /* returns sorted collection with keys as Date and values as tasks */
     public static SortedMap<Date, Set<Task>> calendar (Iterable<Task> tasks, Date start, Date end) throws CustomExсeption {
         //создаём коллекцию что будем возвращать
         TreeMap<Date, Set<Task>> setOfTasks = new TreeMap<>();

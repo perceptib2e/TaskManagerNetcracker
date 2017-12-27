@@ -12,17 +12,17 @@ public class LinkedTaskList extends TaskList {
     private InnerTask last;
     private int size;
 
-    //constructor
+    /* constructor */
     public LinkedTaskList() {
     }
 
-    //inner class
+    /* inner class */
     private class InnerTask {
         private Task currTask;
         private InnerTask prevTask;
         private InnerTask nextTask;
 
-        //constructors
+        /* constructors */
         private InnerTask(Task task) {
             this.currTask = task;
             this.prevTask = null;
@@ -80,13 +80,13 @@ public class LinkedTaskList extends TaskList {
         return false;
     }
 
-    //returns amount of tasks in list
+    /* returns amount of tasks in list */
     @Override
     public int size() {
         return size;
     }
 
-    //returns task on "index" position
+    /* returns task on "index" position */
     @Override
     public Task getTask(int index) throws IndexOutOfBoundsException {
         InnerTask inn = first;
@@ -100,10 +100,10 @@ public class LinkedTaskList extends TaskList {
     @Override
     public void getTaskCHECK(int index) throws IndexOutOfBoundsException {
         if (index >= size)
-            throw new IndexOutOfBoundsException("LinkedList has " + size + " tasks (last has index " + (size - 1) + " from 0 in symonenko.alexandr.LinkedTaskList). Requested task is " + index + ".");
+            throw new IndexOutOfBoundsException("LinkedList has " + size + " tasks (last has index " + (size - 1) + " from 0 in LinkedTaskList). Requested task is " + index + ".");
     }
 
-    //iterator
+    /* iterator */
     @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {
