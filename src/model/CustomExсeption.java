@@ -1,4 +1,4 @@
-package symonenko.alexandr;
+package model;
 
 public class CustomExсeption extends RuntimeException {
 

@@ -1,4 +1,4 @@
-package symonenko.alexandr;
+package model;
 
 import java.util.Iterator;
 
@@ -76,7 +76,7 @@ public class LinkedTaskList extends TaskList {
                 innTaskSearch = innTaskSearch.nextTask;
             }
         }
-        System.out.println("symonenko.alexandr.Task " + task.getTitle() + " is absent in symonenko.alexandr.LinkedTaskList.");
+        System.out.println("model.Task " + task.getTitle() + " is absent in model.LinkedTaskList.");
         return false;
     }
 
@@ -104,26 +104,22 @@ public class LinkedTaskList extends TaskList {
     }
 
     /* iterator */
-    @Override
     public Iterator<Task> iterator() {
         return new Iterator<Task>() {
 
             InnerTask iterObserver = first;
 
-            @Override
-            public boolean hasNext() {
+                      public boolean hasNext() {
                 return iterObserver != null;
             }
 
-            @Override
-            public Task next() {
+                        public Task next() {
                 if (!hasNext()) throw new IllegalStateException("Cannot find the next task");
                 Task task = iterObserver.currTask;
                 iterObserver = iterObserver.nextTask;
                 return task;
             }
 
-            @Override
             public void remove() {
                 if (iterObserver.prevTask == null) throw new IllegalStateException("Nothing to remove");
                 LinkedTaskList.this.remove(iterObserver.prevTask.currTask);
