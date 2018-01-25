@@ -1,20 +1,25 @@
-package controller;
+package src.controller;
 
-import model.ArrayTaskList;
-import model.TaskIO;
-import view.MainUI;
+import org.apache.log4j.Logger;
+import src.model.ArrayTaskList;
+import src.model.TaskIO;
+import src.view.MainUI;
 
 import java.io.File;
 import java.io.IOException;
 
+
 public class MainController {
 
     static File tasklistFile = new File("tasklistFile.txt");
-    final static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MainController.class.getClass());
+    final static Logger logger = Logger.getLogger(MainController.class.getClass());
     static ArrayTaskList taskList = new ArrayTaskList();
 
     public static void main(String[] args) {
-
+        MainController mc = new MainController();
+        AppController ac = new AppController();
+        MainUI mui = new MainUI();
+        mui.setAc(ac);
         logger.info("***TASK MANAGER LAUNCHED***");
         if (!tasklistFile.exists()) try {
             tasklistFile.createNewFile();
@@ -23,10 +28,10 @@ public class MainController {
         }
         logger.info("reading \"tasklistFile.txt\", launching UI code...");
         readList();
-        MainUI.Launch();
+        mui.Launch(mc);
     }
 
-    // reads tasklistFile.txt
+    /* reads tasklistFile.txt */
     public static void readList() {
         try {
             TaskIO.readText(taskList, tasklistFile);
@@ -35,7 +40,7 @@ public class MainController {
         }
     }
 
-    //save taskList to the tasklistFile.txt.
+    /* save taskList to the tasklistFile.txt. */
     public static void saveList() {
         try {
             TaskIO.writeText(taskList, tasklistFile);

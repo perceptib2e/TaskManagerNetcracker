@@ -1,11 +1,11 @@
-package model;
+package src.model;
 
 import java.util.*;
 
 public class Tasks {
 
     /* returns list of tasks from selected time range */
-    public static Iterable<Task> incoming(Iterable<Task> tasks, Date start, Date end) throws CustomExсeption {
+    public static Iterable<Task> incoming(Iterable<Task> tasks, Date start, Date end) throws CustomException {
 
         TaskList arOfTasks = new ArrayTaskList();
         for (Task task : tasks) {
@@ -16,7 +16,7 @@ public class Tasks {
     }
 
     /* returns sorted collection with keys as Date and values as tasks */
-    public static SortedMap<Date, Set<Task>> calendar (Iterable<Task> tasks, Date start, Date end) throws CustomExсeption {
+    public static SortedMap<Date, Set<Task>> calendar (Iterable<Task> tasks, Date start, Date end) throws CustomException {
         //создаём коллекцию что будем возвращать
         TreeMap<Date, Set<Task>> setOfTasks = new TreeMap<>();
         //создаём список задач (массив) что будет заполнен с помощью инкоминг()

@@ -1,4 +1,4 @@
-package model;
+package src.model;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -9,15 +9,15 @@ public abstract class TaskList implements Iterable<Task>, Serializable {
 
     /* abstract methods */
 
-    abstract void add(Task task) throws CustomExсeption;
+    abstract void add(Task task) throws CustomException;
 
-    abstract boolean remove(Task task) throws CustomExсeption;
+    abstract boolean remove(Task task) throws CustomException;
 
     abstract int size();
 
-    abstract Task getTask(int index) throws CustomExсeption;
+    abstract Task getTask(int index) throws CustomException;
 
-    abstract void getTaskCHECK(int index) throws CustomExсeption;
+    abstract void getTaskCHECK(int index) throws CustomException;
 
     /* methods with body */
 

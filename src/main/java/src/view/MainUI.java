@@ -1,10 +1,10 @@
-package view;
+package src.view;
 
-import controller.MainController;
-import eclipse.wb.swt.SWTResourceManager;
-import model.CustomExсeption;
-import model.Task;
-import model.Tasks;
+import src.controller.MainController;
+import src.controller.AppController;
+import src.eclipse.wb.swt.SWTResourceManager;
+
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -22,12 +22,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
 
 
 public class MainUI {
@@ -77,15 +73,24 @@ public class MainUI {
     private Label lblTexthere;
 
     private final static Logger logger = Logger.getLogger(MainUI.class.getClass());
+    private static MainController mc;
+    private static AppController ac;
 
-    public static void Launch() {
+    private static MainUI mui = new MainUI();
+
+    public static void Launch(MainController mainController) {
+        mc = mainController;
+        ac.setMui();
         try {
-            MainUI window = new MainUI();
-            window.open();
+            mui.open();
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("Trouble with launching MainUI");
         }
+    }
+
+    public void setAc(AppController ac) {
+        this.ac = ac;
     }
 
     /*open the window*/
@@ -101,10 +106,10 @@ public class MainUI {
         }
     }
 
-    //create window content
+    /* create window content */
     protected void createContents() {
         shell = new Shell();
-        shell.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/main icon.png"));
+        shell.setImage(SWTResourceManager.getImage(MainUI.class, "/images/main icon.png"));
         shell.setSize(new Point(650, 490));
         shell.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
         shell.setLocation(new Point(600, 300));
@@ -113,11 +118,7 @@ public class MainUI {
         shell.setText("Task Manager (NTC project)");
         shell.setLayout(new FormLayout());
 
-
-        //////////////////////////////////////////////////////////////////////////////////
-        // MENU
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* MENU */
         Menu menu = new Menu(shell, SWT.BAR);
         shell.setMenuBar(menu);
 
@@ -129,30 +130,28 @@ public class MainUI {
 
         MenuItem mntmTaskList = new MenuItem(menu_1, SWT.CASCADE);
         mntmTaskList.setText("task list");
-        mntmTaskList.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/list small.png"));
+        mntmTaskList.setImage(SWTResourceManager.getImage(MainUI.class, "/images/list small.png"));
 
         Menu menu_3 = new Menu(mntmTaskList);
         mntmTaskList.setMenu(menu_3);
 
-
-
         MenuItem mntmShowTaskList = new MenuItem(menu_3, SWT.NONE);
-        mntmShowTaskList.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/list small.png"));
+        mntmShowTaskList.setImage(SWTResourceManager.getImage(MainUI.class, "/images/list small.png"));
         mntmShowTaskList.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                showList();
+                ac.showList();
             }
         });
         mntmShowTaskList.setToolTipText("(actually)");
         mntmShowTaskList.setText("show");
 
         mntmEdit = new MenuItem(menu_3, SWT.NONE);
-        mntmEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/edit list small.png"));
+        mntmEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/images/edit list small.png"));
         mntmEdit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                showListAndButtons();
+                ac.showListAndButtons();
             }
         });
         mntmEdit.setText("edit");
@@ -160,11 +159,11 @@ public class MainUI {
         new MenuItem(menu_1, SWT.SEPARATOR);
 
         MenuItem mntmCalendar = new MenuItem(menu_1, SWT.NONE);
-        mntmCalendar.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/calendar small.png"));
+        mntmCalendar.setImage(SWTResourceManager.getImage(MainUI.class, "/images/calendar small.png"));
         mntmCalendar.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                showCalendar();
+                ac.showCalendar();
             }
         });
         mntmCalendar.setToolTipText("shows list of tasks at the specified period ");
@@ -173,7 +172,7 @@ public class MainUI {
         new MenuItem(menu_1, SWT.SEPARATOR);
 
         MenuItem mntmExit = new MenuItem(menu_1, SWT.NONE);
-        mntmExit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/emergency-exit.png"));
+        mntmExit.setImage(SWTResourceManager.getImage(MainUI.class, "/images/emergency-exit.png"));
         mntmExit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
@@ -191,22 +190,22 @@ public class MainUI {
         mntmHelp.setMenu(menu_2);
 
         MenuItem mntmAbout = new MenuItem(menu_2, SWT.NONE);
-        mntmAbout.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/about small.png"));
+        mntmAbout.setImage(SWTResourceManager.getImage(MainUI.class, "/images/about small.png"));
         mntmAbout.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                grpProgramInfo.setVisible(true);
+                ac.showProgramInfo();
             }
         });
         mntmAbout.setText("about");
 
         MenuItem mntmMotivation = new MenuItem(menu_2, SWT.NONE);
-        mntmMotivation.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/motivation.png"));
+        mntmMotivation.setImage(SWTResourceManager.getImage(MainUI.class, "/images/motivation.png"));
         mntmMotivation.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 try {
-                    motivation();
+                    ac.motivation();
                 } catch (IOException | URISyntaxException e1) {
                     e1.printStackTrace();
                 }
@@ -214,10 +213,7 @@ public class MainUI {
         });
         mntmMotivation.setText("motivation");
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // ERROR MESSAGE FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* ERROR MESSAGE FIELD GROUP */
         grpErrorMesage = new Group(shell, SWT.NONE);
         grpErrorMesage.setText("error mesage");
         grpErrorMesage.setLayout(null);
@@ -234,7 +230,7 @@ public class MainUI {
         btnOk.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                errorClose();
+                ac.errorClose();
             }
         });
         btnOk.setBounds(130, 63, 75, 25);
@@ -248,14 +244,11 @@ public class MainUI {
         lblTexthere.setText("texthere");
 
         Label lblErrorImage = new Label(grpErrorMesage, SWT.NONE);
-        lblErrorImage.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/error big.png"));
+        lblErrorImage.setImage(SWTResourceManager.getImage(MainUI.class, "/images/error big.png"));
         lblErrorImage.setBounds(10, 18, 64, 70);
         formToolkit.adapt(lblErrorImage, true, true);
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // ABOUT FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* ABOUT FIELD GROUP */
         grpProgramInfo = new Group(shell, SWT.SHADOW_ETCHED_IN);
         grpProgramInfo.setLayout(null);
         FormData fd_grpProgramInfo = new FormData();
@@ -295,7 +288,7 @@ public class MainUI {
         lblCustomerNetcrackerJava.setText("customer: Netcracker java course");
 
         lblNewLabel_1 = new Label(grpProgramInfo, SWT.NONE);
-        lblNewLabel_1.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/ntc.png"));
+        lblNewLabel_1.setImage(SWTResourceManager.getImage(MainUI.class, "/images/ntc.png"));
         lblNewLabel_1.setBounds(209, 21, 87, 56);
         formToolkit.adapt(lblNewLabel_1, true, true);
 
@@ -304,10 +297,7 @@ public class MainUI {
         formToolkit.adapt(lblSumyUkraine, true, true);
         lblSumyUkraine.setText("Sumy, Ukraine");
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // START FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* START FIELD GROUP */
         startField = new Composite(shell, SWT.NONE);
         startField.setLayout(new FormLayout());
         FormData fd_startField = new FormData();
@@ -318,7 +308,7 @@ public class MainUI {
         formToolkit.paintBordersFor(startField);
 
         lblNewLabel = new Label(startField, SWT.NONE);
-        lblNewLabel.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/homer.jpg"));
+        lblNewLabel.setImage(SWTResourceManager.getImage(MainUI.class, "/images/homer.jpg"));
         FormData fd_lblNewLabel = new FormData();
         fd_lblNewLabel.top = new FormAttachment(0, 99);
         fd_lblNewLabel.left = new FormAttachment(0, 122);
@@ -333,10 +323,7 @@ public class MainUI {
         formToolkit.adapt(lblWelcome, true, true);
         lblWelcome.setText("welcome!");
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // CALENDAR FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* CALENDAR FIELD GROUP */
         grpCalendar = new Group(shell, SWT.NONE);
         grpCalendar.setText("calendar");
         grpCalendar.setLayout(new FormLayout());
@@ -351,21 +338,19 @@ public class MainUI {
 
         lblNewLabel_4 = new Label(grpCalendar, SWT.NONE);
         lblNewLabel_4.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
-        lblNewLabel_4.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/calendar big.png"));
+        lblNewLabel_4.setImage(SWTResourceManager.getImage(MainUI.class, "/images/calendar big.png"));
         FormData fd_lblNewLabel_4 = new FormData();
         fd_lblNewLabel_4.top = new FormAttachment(0, 300);
         fd_lblNewLabel_4.left = new FormAttachment(0, 480);
         lblNewLabel_4.setLayoutData(fd_lblNewLabel_4);
         formToolkit.adapt(lblNewLabel_4, true, true);
 
-        // list_cal_1 label #1
         lblFrom = new Label(grpCalendar, SWT.NONE);
         FormData fd_lblFrom = new FormData();
         lblFrom.setLayoutData(fd_lblFrom);
         formToolkit.adapt(lblFrom, true, true);
         lblFrom.setText("from:");
 
-        // list_cal_1 label #2
         lblTo = new Label(grpCalendar, SWT.NONE);
         FormData fd_lblTo = new FormData();
         fd_lblTo.right = new FormAttachment(lblFrom, 0, SWT.RIGHT);
@@ -373,7 +358,6 @@ public class MainUI {
         formToolkit.adapt(lblTo, true, true);
         lblTo.setText("to:");
 
-        // list_cal_1 label #3
         lblChooseTimePeriod = new Label(grpCalendar, SWT.NONE);
         fd_lblFrom.top = new FormAttachment(6, 9);
         FormData fd_lblChooseTimePeriod = new FormData();
@@ -383,7 +367,7 @@ public class MainUI {
         formToolkit.adapt(lblChooseTimePeriod, true, true);
         lblChooseTimePeriod.setText("choose time period:");
 
-        // list_cal_1 datepick #1
+        /* list datepick "from" */
         date_cal_from = new DateTime(grpCalendar, SWT.BORDER);
         fd_lblFrom.right = new FormAttachment(date_cal_from, -6);
         FormData fd_dateTime = new FormData();
@@ -393,7 +377,7 @@ public class MainUI {
         formToolkit.adapt(date_cal_from);
         formToolkit.paintBordersFor(date_cal_from);
 
-        // list_cal_1 datepick #2
+        /* list datepick "to" */
         date_cal_to = new DateTime(grpCalendar, SWT.BORDER);
         fd_lblTo.top = new FormAttachment(date_cal_to, 3, SWT.TOP);
         FormData fd_dateTime_1 = new FormData();
@@ -403,12 +387,12 @@ public class MainUI {
         formToolkit.adapt(date_cal_to);
         formToolkit.paintBordersFor(date_cal_to);
 
-        // list_cal_1 button #1
+        /* shows result task list in chosen period */
         btnShow = new Button(grpCalendar, SWT.NONE);
         btnShow.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                showCalendarWithData();
+                ac.showCalendarWithData();
             }
         });
         FormData fd_btnShow = new FormData();
@@ -419,7 +403,7 @@ public class MainUI {
         formToolkit.adapt(btnShow, true, true);
         btnShow.setText("show");
 
-        // list_cal_1 table
+        /* list_cal_1 table */
         listC = new List(grpCalendar, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
         listC.setLayoutData(new FormData());
         formToolkit.adapt(listC, true, true);
@@ -430,10 +414,7 @@ public class MainUI {
         fd_listC.left = new FormAttachment(0, 7);
         listC.setLayoutData(fd_listC);
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // ADD TASK FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* ADD TASK FIELD GROUP */
         grpAddEditTask = new Group(shell, SWT.NONE);
         grpAddEditTask.setText("add task");
         grpAddEditTask.setLayout(null);
@@ -481,7 +462,7 @@ public class MainUI {
         btnTaskIsRepeating.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                repeatingCheck();
+                ac.repeatingCheck();
             }
         });
         btnTaskIsRepeating.setBounds(61, 92, 100, 16);
@@ -523,7 +504,7 @@ public class MainUI {
         btnX.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                denyAddEdit();
+                ac.denyAddEdit();
             }
         });
         btnX.setBounds(60, 170, 30, 30);
@@ -534,23 +515,20 @@ public class MainUI {
         btnAddEdit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                addeditTaskConfirm();
+                ac.addeditTaskConfirm();
             }
         });
-        btnAddEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/add small.png"));
+        btnAddEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/images/add small.png"));
         btnAddEdit.setBounds(96, 170, 168, 30);
         formToolkit.adapt(btnAddEdit, true, true);
         btnAddEdit.setText("add");
 
         lblNewLabel_2 = new Label(grpAddEditTask, SWT.NONE);
-        lblNewLabel_2.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/add big.png"));
+        lblNewLabel_2.setImage(SWTResourceManager.getImage(MainUI.class, "/images/add big.png"));
         lblNewLabel_2.setBounds(199, 47, 68, 117);
         formToolkit.adapt(lblNewLabel_2, true, true);
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // TASKLIST FIELD GROUP
-        //////////////////////////////////////////////////////////////////////////////////
-
+        /* TASKLIST FIELD GROUP */
         grpTasks = new Group(shell, SWT.NONE);
         grpTasks.setText("tasks");
         grpTasks.setLayout(new FormLayout());
@@ -564,7 +542,7 @@ public class MainUI {
         formToolkit.paintBordersFor(grpTasks);
 
         lblNewLabel_3 = new Label(grpTasks, SWT.SHADOW_NONE);
-        lblNewLabel_3.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/list big.png"));
+        lblNewLabel_3.setImage(SWTResourceManager.getImage(MainUI.class, "/images/list big.png"));
         lblNewLabel_3.setBackground(SWTResourceManager.getColor(SWT.COLOR_TRANSPARENT));
         FormData fd_lblNewLabel_3 = new FormData();
         fd_lblNewLabel_3.top = new FormAttachment(0, 300);
@@ -572,14 +550,14 @@ public class MainUI {
         lblNewLabel_3.setLayoutData(fd_lblNewLabel_3);
         formToolkit.adapt(lblNewLabel_3, true, true);
 
-        // list add button #1
+        /* list add/edit button. ADD */
         btnAdd = new Button(grpTasks, SWT.NONE);
         btnAdd.setAlignment(SWT.RIGHT);
-        btnAdd.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/add small.png"));
+        btnAdd.setImage(SWTResourceManager.getImage(MainUI.class, "/images/add small.png"));
         btnAdd.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                addTask();
+                ac.addTask();
                 text_interval.setEnabled(false);
                 dateTime_task_date_2.setEnabled(false);
                 dateTime_task_time_2.setEnabled(false);
@@ -593,14 +571,14 @@ public class MainUI {
         formToolkit.adapt(btnAdd, true, true);
         btnAdd.setText("add       ");
 
-        // list add button #2
+        /* list add/edit button. EDIT */
         btnEdit = new Button(grpTasks, SWT.NONE);
         btnEdit.setAlignment(SWT.RIGHT);
-        btnEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/edit small.png"));
+        btnEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/images/edit small.png"));
         btnEdit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                editTask();
+                ac.editTask();
                 text_interval.setEnabled(false);
                 dateTime_task_date_2.setEnabled(false);
                 dateTime_task_time_2.setEnabled(false);
@@ -617,11 +595,11 @@ public class MainUI {
         // list button #3
         btnRemove = new Button(grpTasks, SWT.NONE);
         btnRemove.setAlignment(SWT.RIGHT);
-        btnRemove.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/remove small.png"));
+        btnRemove.setImage(SWTResourceManager.getImage(MainUI.class, "/images/remove small.png"));
         btnRemove.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                removeTask();
+                ac.removeTask();
             }
         });
         FormData fd_btnRemove = new FormData();
@@ -632,7 +610,7 @@ public class MainUI {
         formToolkit.adapt(btnRemove, true, true);
         btnRemove.setText("remove");
 
-        // list table
+        /* list table */
         listT = new List(grpTasks, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
         FormData fd_listT = new FormData();
         fd_listT.bottom = new FormAttachment(0, 400);
@@ -642,11 +620,6 @@ public class MainUI {
         listT.setLayoutData(fd_listT);
         formToolkit.adapt(listT, true, true);
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // LAUNCH PREPARING
-        //////////////////////////////////////////////////////////////////////////////////
-
-        // hide calendar
         grpCalendar.setVisible(false);
         grpTasks.setVisible(false);
         grpProgramInfo.setVisible(false);
@@ -655,278 +628,115 @@ public class MainUI {
         mntmEdit.setEnabled(false);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // CUSTOM METHODS
-    //////////////////////////////////////////////////////////////////////////////////
-
-    //****************************************************************************
-    // methods for menu
-    //****************************************************************************
-
-    // list view, without buttons
-    public void showList() {
-        startField.setVisible(false);
-        listT.removeAll();
-        for (int i = 0; i < MainController.getList().size(); i++){
-            listT.add(MainController.getList().getTask(i).toString());
-        }
-        listT.setEnabled(true);
-        if (listT.getVisible() == true){
-            grpCalendar.setVisible(false);
-            grpTasks.setVisible(true);
-            btnAdd.setVisible(false);
-            btnEdit.setVisible(false);
-            btnRemove.setVisible(false);
-        }
-
-        mntmEdit.setEnabled(true);
+    public static MainUI getMui() {
+        return mui;
     }
 
-    // list view, with buttons
-    public void showListAndButtons() {
-        btnAdd.setVisible(true);
-        btnEdit.setVisible(true);
-        btnRemove.setVisible(true);
+    public Group getGrpTasks() {
+        return grpTasks;
     }
 
-    // calendar view, with button
-    public void showCalendar() {
-        startField.setVisible(false);
-        grpTasks.setVisible(false);
-        grpCalendar.setVisible(true);
-        mntmEdit.setEnabled(false);
+    public Group getGrpCalendar() {
+        return grpCalendar;
     }
 
-    // program info view (when press "about")
-    public void showProgramInfo() {
-        grpProgramInfo.setVisible(true);
+    public Button getBtnAdd() {
+        return btnAdd;
     }
 
-    // motivation joke
-    public void motivation() throws IOException, URISyntaxException {
-        Desktop.getDesktop().browse(new URI("https://youtu.be/6H2FRxvsd2M"));
+    public Button getBtnEdit() {
+        return btnEdit;
     }
 
-    //****************************************************************************
-    // methods for task list
-    //****************************************************************************
-
-    // shows add task field
-    public void addTask() {
-        grpAddEditTask.setVisible(true);
-        grpAddEditTask.setText("add task");
-        btnAddEdit.setText("add");
-        btnAddEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/add small.png"));
-        lblNewLabel_2.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/add big.png"));
-        lblNewLabel_2.setBounds(199, 47, 68, 117);
-        listT.setEnabled(false);
-        mntmActions.setEnabled(false);
+    public Button getBtnRemove() {
+        return btnRemove;
     }
 
-    // shows edit task field
-    public void editTask() {
-        if (listT.getSelectionCount() > 0) {
-            grpAddEditTask.setVisible(true);
-            grpAddEditTask.setText("edit task");
-            btnAddEdit.setText("edit");
-            btnAddEdit.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/edit small.png"));
-            lblNewLabel_2.setImage(SWTResourceManager.getImage(MainUI.class, "/eclipse/wb/swt/edit big.png"));
-            lblNewLabel_2.setBounds(202, 47, 68, 117);
-            listT.setEnabled(false);
-            mntmActions.setEnabled(false);
-
-        }
-        else {
-            error("choose task you want to edit");
-            listT.setEnabled(false);
-        }
+    public DateTime getDate_cal_from() {
+        return date_cal_from;
     }
 
-    // check for entering repeating or non-repeating task
-    public void repeatingCheck() {
-        if(!text_interval.isEnabled()) {
-            text_interval.setEnabled(true);
-            dateTime_task_date_2.setEnabled(true);
-            dateTime_task_time_2.setEnabled(true);
-        }
-        else {
-            text_interval.setEnabled(false);
-            dateTime_task_date_2.setEnabled(false);
-            dateTime_task_time_2.setEnabled(false);
-        }
+    public DateTime getDate_cal_to() {
+        return date_cal_to;
     }
 
-    // add or edit task confirm
-    public void addeditTaskConfirm(){
-        if(text_title.getText().isEmpty() && btnTaskIsRepeating.getSelection()) {
-            error("fill all required fields");
-        }
-        if(text_title.getText().isEmpty() || btnTaskIsRepeating.getSelection() && text_interval.getText().isEmpty()) {
-            error("fill all required fields");
-        }
-        else {
-            addOrEditTask();
-            grpTasks.setEnabled(true);
-        }
+    public MenuItem getMntmEdit() {
+        return mntmEdit;
     }
 
-    // exit from add or edit task field without changes
-    public void denyAddEdit() {
-        grpAddEditTask.setVisible(false);
-        grpTasks.setEnabled(true);
-        mntmActions.setEnabled(true);
-        btnTaskIsRepeating.setSelection(false);
-        text_title.setText("");
-        text_interval.setText("");
+    public Composite getStartField() {
+        return startField;
     }
 
-    // remove chosen task
-    public void removeTask() {
-        if (listT.getSelectionCount() > 0) {
-            MainController.getList().remove(MainController.getList().getTask(listT.getSelectionIndex()));
-            MainController.saveList();
-            showList();
-            showListAndButtons();
-        }
-        else {
-            error("choose task you want to remove");
-            listT.setEnabled(false);
-        }
+    public Group getGrpProgramInfo() {
+        return grpProgramInfo;
     }
 
-
-    //****************************************************************************
-    // methods for error pop-up message
-    //****************************************************************************
-
-    //view of error message
-    public void error(String string) {
-        lblTexthere.setText(string);
-        grpErrorMesage.setVisible(true);
-        //1. if error from add/edit field
-        if (grpAddEditTask.isVisible()) {
-            grpAddEditTask.setEnabled(false);
-            grpTasks.setEnabled(false);
-        }
-        //2. if error from list buttons
-        if (grpTasks.isVisible() && !grpAddEditTask.isVisible()) grpTasks.setEnabled(false);
-        //3. if error from calendar field
-        if (grpCalendar.isVisible()) grpCalendar.setEnabled(false);
-
+    public Group getGrpAddEditTask() {
+        return grpAddEditTask;
     }
 
-    //hide error message
-    public void errorClose() {
-        grpErrorMesage.setVisible(false);
-        //1. if error from add/edit field
-        if (grpAddEditTask.isVisible()) {
-            grpAddEditTask.setEnabled(true);
-        }
-        //2. if error from list buttons
-        if (grpTasks.isVisible() && !grpAddEditTask.isVisible()) {
-            grpTasks.setEnabled(true);
-            listT.setEnabled(true);
-        }
-        //3. if error from calendar field
-        if (grpCalendar.isVisible()) grpCalendar.setEnabled(true);
+    public Text getText_title() {
+        return text_title;
     }
 
-    //****************************************************************************
-    // methods for task list adding / editing tasks
-    //****************************************************************************
-
-    //adding task to tasklist or editing task in tasklist
-    public void addOrEditTask() {
-        Task tempTask = null;
-        int interval = -1;
-        String name = text_title.getText();
-        Calendar list_cal_1 = Calendar.getInstance();
-        list_cal_1.setTime(new Date(0));
-        list_cal_1.set(Calendar.YEAR, dateTime_task_date_1.getYear());
-        list_cal_1.set(Calendar.MONTH, dateTime_task_date_1.getMonth());
-        list_cal_1.set(Calendar.DAY_OF_MONTH, dateTime_task_date_1.getDay());
-        list_cal_1.set(Calendar.HOUR_OF_DAY, dateTime_task_time_1.getHours());
-        list_cal_1.set(Calendar.MINUTE, dateTime_task_time_1.getMinutes());
-        long startLong = list_cal_1.getTimeInMillis();
-        boolean activityOfTask = btnTaskIsActive.getSelection();
-        // if task is not repeatable
-        if (btnTaskIsRepeating.getSelection() == false) {
-            try {
-                tempTask = new Task(name, new Date(startLong), activityOfTask);
-
-            } catch (Exception e) {
-                error("Cannot add/edit non repeating task");
-                logger.error("Cannot add/edit non repeating task");
-            }
-        }
-        // if task is repeatable
-        else {
-            try {
-                interval = Integer.parseInt(text_interval.getText()) * 60;
-                Calendar list_cal_2 = Calendar.getInstance();
-                list_cal_2.setTime(new Date(0));
-                list_cal_2.set(Calendar.YEAR, dateTime_task_date_2.getYear());
-                list_cal_2.set(Calendar.MONTH, dateTime_task_date_2.getMonth());
-                list_cal_2.set(Calendar.DAY_OF_MONTH, dateTime_task_date_2.getDay());
-                list_cal_2.set(Calendar.HOUR_OF_DAY, dateTime_task_time_2.getHours());
-                list_cal_2.set(Calendar.MINUTE, dateTime_task_time_2.getMinutes());
-                long endLong = list_cal_2.getTimeInMillis();
-                tempTask = new Task(name, new Date(startLong), new Date(endLong), interval, activityOfTask);
-            } catch (Exception e) {
-                error("Cannot add/edit repeating task");
-                logger.error("Cannot add/edit repeating task");
-            }
-        }
-        // action with task
-        if (grpAddEditTask.getText().equals("add task")){
-            MainController.getList().add(tempTask);
-            MainController.saveList();
-        }
-        else {
-            Task deltask = MainController.getList().getTask(listT.getSelectionIndex());
-            MainController.getList().overwriteTask(deltask, tempTask);
-            MainController.saveList();
-        }
-        // view changes after successful adding/editing task
-        showList();
-        showListAndButtons();
-        listT.setEnabled(true);
-        text_interval.setEnabled(false);
-        btnTaskIsRepeating.setSelection(false);
-        text_title.setText("");
-        text_interval.setText("");
-        grpAddEditTask.setVisible(false);
-        mntmActions.setEnabled(true);
+    public Text getText_interval() {
+        return text_interval;
     }
 
-    //****************************************************************************
-    // methods for task list adding / editing tasks
-    //****************************************************************************
+    public DateTime getDateTime_task_date_1() {
+        return dateTime_task_date_1;
+    }
 
-    //displays tasks of tasklist in time they must appear
-    public void showCalendarWithData() {
-        listC.removeAll();
-        Calendar start = Calendar.getInstance();
-        Calendar end = Calendar.getInstance();
-        start.set(Calendar.YEAR, date_cal_from.getYear());
-        start.set(Calendar.MONTH, date_cal_from.getMonth());
-        start.set(Calendar.DAY_OF_MONTH, date_cal_from.getDay());
-        end.set(Calendar.YEAR, date_cal_to.getYear());
-        end.set(Calendar.MONTH, date_cal_to.getMonth());
-        end.set(Calendar.DAY_OF_MONTH, date_cal_to.getDay());
-        if (start.getTime().after(end.getTime())) {
-            JOptionPane.showMessageDialog(new JFrame(), "Invalid period set");
-        }
-        try {
-            TreeMap<Date, Set<Task>> treeMap1 = (TreeMap<Date, Set<Task>>) Tasks.calendar(MainController.getList(), start.getTime(), end.getTime());
-            for (Map.Entry<Date, Set<Task>> entry: treeMap1.entrySet()) {
-                listC.add(entry.getKey().toString());
-                for (Task task: entry.getValue()) {
-                    listC.add(task.getTitle());
-                }
-            }
-        } catch (CustomExсeption e) {
-            logger.error("Error with showing calendar");
-        }
+    public DateTime getDateTime_task_time_1() {
+        return dateTime_task_time_1;
+    }
+
+    public Button getBtnTaskIsActive() {
+        return btnTaskIsActive;
+    }
+
+    public Button getBtnTaskIsRepeating() {
+        return btnTaskIsRepeating;
+    }
+
+    public DateTime getDateTime_task_date_2() {
+        return dateTime_task_date_2;
+    }
+
+    public DateTime getDateTime_task_time_2() {
+        return dateTime_task_time_2;
+    }
+
+    public Button getBtnAddEdit() {
+        return btnAddEdit;
+    }
+
+    public List getListT() {
+        return listT;
+    }
+
+    public List getListC() {
+        return listC;
+    }
+
+    public MenuItem getMntmActions() {
+        return mntmActions;
+    }
+
+    public Label getLblNewLabel_2() {
+        return lblNewLabel_2;
+    }
+
+    public Group getGrpErrorMesage() {
+        return grpErrorMesage;
+    }
+
+    public Label getLblTexthere() {
+        return lblTexthere;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

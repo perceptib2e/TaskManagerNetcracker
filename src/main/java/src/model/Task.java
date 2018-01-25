@@ -1,4 +1,4 @@
-package model;
+package src.model;
 
 import java.util.Date;
 import java.text.SimpleDateFormat;
@@ -13,20 +13,20 @@ public class Task implements Cloneable, Serializable{
     private boolean active;
 
     /* constructors */
-    public Task(String title, Date time) throws CustomExсeption {
+    public Task(String title, Date time) throws CustomException {
         this.title = title;
         this.time = time;
         checkTime();
     }
 
-    public Task(String title, Date time, boolean active) throws CustomExсeption{
+    public Task(String title, Date time, boolean active) throws CustomException{
         this.title = title;
         this.time = time;
         this.active = active;
         checkTime();
     }
 
-    public Task(String title, Date start, Date end, int interval) throws CustomExсeption {
+    public Task(String title, Date start, Date end, int interval) throws CustomException {
         this.title = title;
         this.start = start;
         this.end = end;
@@ -34,7 +34,7 @@ public class Task implements Cloneable, Serializable{
         checkTime();
     }
 
-    public Task(String title, Date start, Date end, int interval, boolean active) throws CustomExсeption {
+    public Task(String title, Date start, Date end, int interval, boolean active) throws CustomException {
         this.title = title;
         this.start = start;
         this.end = end;
@@ -43,18 +43,18 @@ public class Task implements Cloneable, Serializable{
         checkTime();
     }
 
-    public void checkTime() throws CustomExсeption{
+    public void checkTime() throws CustomException{
 
         //for non-repetitive tasks
         if (this.interval == 0){
             if (this.time.compareTo(new Date(0)) < 0){
-                throw new CustomExсeption("Time cannot be < 0");
+                throw new CustomException("Time cannot be < 0");
             }
         }
         //for repetitive tasks
         if (this.interval != 0){
             if (this.start.before(new Date(0)) || this.end.before(new Date(0)) || this.interval < 0){
-                throw new CustomExсeption("Time cannot be < 0");
+                throw new CustomException("Time cannot be < 0");
             }
         }
     }
