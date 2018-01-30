@@ -1,9 +1,9 @@
-package src.controller;
+package com.symonenko.oleksandr.controller;
 
 import org.apache.log4j.Logger;
-import src.model.ArrayTaskList;
-import src.model.TaskIO;
-import src.view.MainUI;
+import com.symonenko.oleksandr.model.ArrayTaskList;
+import com.symonenko.oleksandr.model.TaskIO;
+import com.symonenko.oleksandr.view.MainUI;
 
 import java.io.File;
 import java.io.IOException;

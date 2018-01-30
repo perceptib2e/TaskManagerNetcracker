@@ -9,7 +9,7 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jdk.version>1.8</jdk.version>
+        <jdk.version>1.7</jdk.version>
     </properties>
 
     <build>
@@ -32,7 +32,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>src.controller.MainController</mainClass>
+                            <mainClass>com.symonenko.oleksandr.controller.MainController</mainClass>
                             <packageName>main</packageName>
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
@@ -46,7 +46,7 @@
                 <executions>
                     <execution>
                         <configuration>
-                            <mainClass>src.controller.MainController</mainClass>
+                            <mainClass>com.symonenko.oleksandr.controller.MainController</mainClass>
                         </configuration>
                         <goals>
                             <goal>one-jar</goal>

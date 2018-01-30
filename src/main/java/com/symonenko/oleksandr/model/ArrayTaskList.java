@@ -1,4 +1,4 @@
-package src.model;
+package com.symonenko.oleksandr.model;
 
 import java.util.Arrays;
 import java.util.Iterator;

@@ -1,4 +1,4 @@
-package src.model;
+package com.symonenko.oleksandr.model;
 
 import java.io.*;
 import java.text.SimpleDateFormat;

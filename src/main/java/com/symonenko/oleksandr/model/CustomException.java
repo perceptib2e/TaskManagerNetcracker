@@ -1,4 +1,4 @@
-package src.model;
+package com.symonenko.oleksandr.model;
 
 public class CustomException extends RuntimeException {
 

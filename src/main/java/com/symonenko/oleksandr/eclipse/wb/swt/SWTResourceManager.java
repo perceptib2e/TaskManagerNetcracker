@@ -8,7 +8,8 @@
  * Contributors:
  *    Google, Inc. - initial API and implementation
  *******************************************************************************/
-package src.eclipse.wb.swt;
+
+package com.symonenko.oleksandr.eclipse.wb.swt;  // оце шо
 
 import java.io.FileInputStream;
 import java.io.IOException;

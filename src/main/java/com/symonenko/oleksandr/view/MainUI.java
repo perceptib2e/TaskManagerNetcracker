@@ -1,8 +1,8 @@
-package src.view;
+package com.symonenko.oleksandr.view;
 
-import src.controller.MainController;
-import src.controller.AppController;
-import src.eclipse.wb.swt.SWTResourceManager;
+import com.symonenko.oleksandr.controller.MainController;
+import com.symonenko.oleksandr.controller.AppController;
+import com.symonenko.oleksandr.eclipse.wb.swt.*;
 
 
 import org.apache.log4j.Logger;
@@ -558,9 +558,6 @@ public class MainUI {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 ac.addTask();
-                text_interval.setEnabled(false);
-                dateTime_task_date_2.setEnabled(false);
-                dateTime_task_time_2.setEnabled(false);
             }
         });
         FormData fd_btnAdd = new FormData();
@@ -579,9 +576,6 @@ public class MainUI {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 ac.editTask();
-                text_interval.setEnabled(false);
-                dateTime_task_date_2.setEnabled(false);
-                dateTime_task_time_2.setEnabled(false);
             }
         });
         FormData fd_btnEdit = new FormData();

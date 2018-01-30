@@ -1,10 +1,10 @@
-package src.controller;
+package com.symonenko.oleksandr.controller;
 
-import src.eclipse.wb.swt.SWTResourceManager;
-import src.model.CustomException;
-import src.model.Task;
-import src.model.Tasks;
-import src.view.MainUI;
+import com.symonenko.oleksandr.eclipse.wb.swt.SWTResourceManager;
+import com.symonenko.oleksandr.model.CustomException;
+import com.symonenko.oleksandr.model.Task;
+import com.symonenko.oleksandr.model.Tasks;
+import com.symonenko.oleksandr.view.MainUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,6 +83,7 @@ public class AppController {
     /* shows edit task field */
     public void editTask() {
         if (mui.getListT().getSelectionCount() > 0) {
+            //vision
             mui.getGrpAddEditTask().setVisible(true);
             mui.getGrpAddEditTask().setText("edit task");
             mui.getBtnAddEdit().setText("edit");
@@ -92,6 +93,34 @@ public class AppController {
             mui.getListT().setEnabled(false);
             mui.getMntmActions().setEnabled(false);
 
+            //autofill
+            Task target = MainController.getList().getTask(mui.getListT().getSelectionIndex());
+            Calendar cal_t = Calendar.getInstance();
+            cal_t.setTime(target.getStartTime());
+            int year1 = cal_t.get(Calendar.YEAR);
+            int month1 = cal_t.get(Calendar.MONTH);
+            int day1 = cal_t.get(Calendar.DAY_OF_MONTH);
+            mui.getText_title().setText(target.getTitle());
+            //проверка установки времени
+            mui.getDateTime_task_date_1().setDate(year1,month1,day1);
+            mui.getDateTime_task_time_1().setTime(target.getStartTime().getHours(), target.getStartTime().getMinutes(), target.getStartTime().getSeconds());
+            mui.getBtnTaskIsActive().setSelection(target.isActive());
+            if (target.isRepeated()) {
+                mui.getBtnTaskIsRepeating().setSelection(true);
+                repeatingCheck();
+                mui.getText_interval().setText(String.valueOf(target.getRepeatInterval() / 60));
+                cal_t.setTime(target.getEndTime());
+                int year2 = cal_t.get(Calendar.YEAR);
+                int month2 = cal_t.get(Calendar.MONTH);
+                int day2 = cal_t.get(Calendar.DAY_OF_MONTH);
+                mui.getDateTime_task_date_2().setDate(year2,month2,day2);
+                mui.getDateTime_task_time_2().setTime(target.getEndTime().getHours(), target.getStartTime().getMinutes(), target.getStartTime().getSeconds());
+            }
+            else {
+                mui.getText_interval().setEnabled(false);
+                mui.getDateTime_task_date_2().setEnabled(false);
+                mui.getDateTime_task_time_2().setEnabled(false);
+            }
         }
         else {
             error("choose task you want to edit");
@@ -101,7 +130,7 @@ public class AppController {
 
     /* check for entering repeating or non-repeating task */
     public void repeatingCheck() {
-        if(!mui.getText_interval().isEnabled()) {
+        if(mui.getBtnTaskIsRepeating().getSelection()) {
             mui.getText_interval().setEnabled(true);
             mui.getDateTime_task_date_2().setEnabled(true);
             mui.getDateTime_task_time_2().setEnabled(true);
@@ -131,6 +160,7 @@ public class AppController {
     public void denyAddEdit() {
         mui.getGrpAddEditTask().setVisible(false);
         mui.getGrpTasks().setEnabled(true);
+        mui.getListT().setEnabled(true);
         mui.getMntmActions().setEnabled(true);
         mui.getBtnTaskIsRepeating().setSelection(false);
         mui.getText_title().setText("");
@@ -231,11 +261,13 @@ public class AppController {
         if (mui.getGrpAddEditTask().getText().equals("add task")){
             MainController.getList().add(tempTask);
             MainController.saveList();
+            mui.getBtnTaskIsRepeating().setSelection(false);
         }
         else {
             Task deltask = MainController.getList().getTask(mui.getListT().getSelectionIndex());
             MainController.getList().overwriteTask(deltask, tempTask);
             MainController.saveList();
+            mui.getBtnTaskIsRepeating().setSelection(false);
         }
         // view changes after successful adding/editing task
         showList();
