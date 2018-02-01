@@ -62,11 +62,13 @@ public class NotifyController extends Thread{
             Iterable<Task> incArr = Tasks.incoming(MainController.getList(), cal1.getTime(),cal2.getTime());
             incomingArray = (ArrayTaskList) incArr;
             for (Task task : incomingArray) {
-                if (incoming.equals("")){
-                    incoming = task.getTitle();
-                }
-                else {
-                    incoming = incoming  + ", " + task.getTitle();
+                if (task.isActive()){
+                    if (incoming.equals("")){
+                        incoming = task.getTitle();
+                    }
+                    else {
+                        incoming = incoming  + ", " + task.getTitle();
+                    }
                 }
             }
         } catch (CustomException e) {

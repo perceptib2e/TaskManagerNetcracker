@@ -95,10 +95,6 @@ public class MainUI {
         this.ac = ac;
     }
 
-//    public void setNc(NotifyController nc){
-//        this.nc = nc;
-//    }
-
     /*open the window*/
     public void open() {
         Display display = Display.getDefault();

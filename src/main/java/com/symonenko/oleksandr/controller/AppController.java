@@ -85,6 +85,9 @@ public class AppController {
         mui.getBtnAddEdit().setImage(SWTResourceManager.getImage(MainUI.class, "/images/add small.png"));
         mui.getLblNewLabel_2().setImage(SWTResourceManager.getImage(MainUI.class, "/images/add big.png"));
         mui.getLblNewLabel_2().setBounds(199, 47, 68, 117);
+        mui.getDateTime_task_date_2().setEnabled(false);
+        mui.getDateTime_task_time_2().setEnabled(false);
+        mui.getText_interval().setEnabled(false);
         mui.getListT().setEnabled(false);
         mui.getMntmActions().setEnabled(false);
     }
