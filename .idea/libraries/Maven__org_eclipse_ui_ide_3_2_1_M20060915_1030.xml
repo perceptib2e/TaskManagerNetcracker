@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.eclipse.ui:ide:3.2.1-M20060915-1030">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/ui/ide/3.2.1-M20060915-1030/ide-3.2.1-M20060915-1030.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/ui/ide/3.2.1-M20060915-1030/ide-3.2.1-M20060915-1030-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/eclipse/ui/ide/3.2.1-M20060915-1030/ide-3.2.1-M20060915-1030-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

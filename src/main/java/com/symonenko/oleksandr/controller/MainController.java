@@ -14,12 +14,15 @@ public class MainController {
     static File tasklistFile = new File("tasklistFile.txt");
     final static Logger logger = Logger.getLogger(MainController.class.getClass());
     static ArrayTaskList taskList = new ArrayTaskList();
+    static MainController mc = new MainController();
+    static AppController ac = new AppController();
+    static MainUI mui = new MainUI();
+    static NotifyController nc = new NotifyController();
 
     public static void main(String[] args) {
-        MainController mc = new MainController();
-        AppController ac = new AppController();
-        MainUI mui = new MainUI();
         mui.setAc(ac);
+        ac.setMc();
+        nc.setMcAc(mc,ac);
         logger.info("***TASK MANAGER LAUNCHED***");
         if (!tasklistFile.exists()) try {
             tasklistFile.createNewFile();
@@ -28,6 +31,7 @@ public class MainController {
         }
         logger.info("reading \"tasklistFile.txt\", launching UI code...");
         readList();
+
         mui.Launch(mc);
     }
 
@@ -52,5 +56,13 @@ public class MainController {
     // public access to the taskList
     public static ArrayTaskList getList() {
         return taskList;
+    }
+
+    public static MainController getMc(){
+        return mc;
+    }
+
+    public static Logger getLogger() {
+        return logger;
     }
 }

@@ -16,9 +16,18 @@ import java.util.*;
 public class AppController {
 
     private MainUI mui;
+    private MainController mc;
+
+    public void setMc(){
+        this.mc = MainController.getMc();
+    }
 
     public void setMui() {
         this.mui = MainUI.getMui();
+    }
+
+    public MainUI getMui() {
+        return this.mui;
     }
 
     /* methods for menu */
@@ -184,7 +193,7 @@ public class AppController {
     /* methods for error pop-up message */
     /* view of error message */
     public void error(String string) {
-        mui.getLblTexthere().setText(string);
+        mui.getlblerrTexthere().setText(string);
         mui.getGrpErrorMesage().setVisible(true);
         //1. if error from add/edit field
         if (mui.getGrpAddEditTask().isVisible()) {
@@ -214,6 +223,16 @@ public class AppController {
         if (mui.getGrpCalendar().isVisible()) mui.getGrpCalendar().setEnabled(true);
     }
 
+    /* methods for notification pop-up message */
+    public void notificationShow(String string){
+        mui.getLblNotificationTexthere().setText(string);
+        mui.getGrpNotificationMesage().setVisible(true);
+    }
+
+    public void notificationClose(){
+        mui.getGrpNotificationMesage().setVisible(false);
+    }
+
     /* methods for task list adding / editing tasks */
     /* adding task to tasklist or editing task in tasklist */
     public void addOrEditTask() {
@@ -236,7 +255,7 @@ public class AppController {
 
             } catch (Exception e) {
                 error("Cannot add/edit non repeating task");
-                mui.getLogger().error("Cannot add/edit non repeating task");
+                mc.getLogger().error("Cannot add/edit non repeating task");
             }
         }
         // if task is repeatable
@@ -254,7 +273,7 @@ public class AppController {
                 tempTask = new Task(name, new Date(startLong), new Date(endLong), interval, activityOfTask);
             } catch (Exception e) {
                 error("Cannot add/edit repeating task");
-                mui.getLogger().error("Cannot add/edit repeating task");
+                mc.getLogger().error("Cannot add/edit repeating task");
             }
         }
         // action with task
@@ -305,7 +324,7 @@ public class AppController {
                 }
             }
         } catch (CustomException e) {
-            mui.getLogger().error("Error with showing calendar");
+            mc.getLogger().error("Error with showing calendar");
         }
     }
 }

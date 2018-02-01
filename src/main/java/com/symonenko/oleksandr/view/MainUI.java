@@ -2,6 +2,7 @@ package com.symonenko.oleksandr.view;
 
 import com.symonenko.oleksandr.controller.MainController;
 import com.symonenko.oleksandr.controller.AppController;
+import com.symonenko.oleksandr.controller.NotifyController;
 import com.symonenko.oleksandr.eclipse.wb.swt.*;
 
 
@@ -70,9 +71,10 @@ public class MainUI {
     private MenuItem mntmActions;
     private Label lblNewLabel_2;
     private Group grpErrorMesage;
-    private Label lblTexthere;
+    private Label lblerrTexthere;
+    private Group grpNotificationMesage;
+    private Label lblNotificationTexthere;
 
-    private final static Logger logger = Logger.getLogger(MainUI.class.getClass());
     private static MainController mc;
     private static AppController ac;
 
@@ -85,13 +87,17 @@ public class MainUI {
             mui.open();
         } catch (Exception e) {
             e.printStackTrace();
-            logger.error("Trouble with launching MainUI");
+            mc.getLogger().error("Trouble with launching MainUI");
         }
     }
 
     public void setAc(AppController ac) {
         this.ac = ac;
     }
+
+//    public void setNc(NotifyController nc){
+//        this.nc = nc;
+//    }
 
     /*open the window*/
     public void open() {
@@ -176,7 +182,7 @@ public class MainUI {
         mntmExit.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
-                logger.info("***TASK MANAGER IS SHOOTING DOWN***");
+                mc.getLogger().info("***TASK MANAGER IS SHOOTING DOWN***");
                 shell.dispose();
             }
         });
@@ -215,7 +221,7 @@ public class MainUI {
 
         /* ERROR MESSAGE FIELD GROUP */
         grpErrorMesage = new Group(shell, SWT.NONE);
-        grpErrorMesage.setText("error mesage");
+        grpErrorMesage.setText("error message");
         grpErrorMesage.setLayout(null);
         FormData fd_grpErrorMesage = new FormData();
         fd_grpErrorMesage.height = 80;
@@ -226,27 +232,63 @@ public class MainUI {
         formToolkit.adapt(grpErrorMesage);
         formToolkit.paintBordersFor(grpErrorMesage);
 
-        Button btnOk = new Button(grpErrorMesage, SWT.NONE);
-        btnOk.addSelectionListener(new SelectionAdapter() {
+        Button btnErrOk = new Button(grpErrorMesage, SWT.NONE);
+        btnErrOk.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
                 ac.errorClose();
             }
         });
-        btnOk.setBounds(130, 63, 75, 25);
-        formToolkit.adapt(btnOk, true, true);
-        btnOk.setText("ok");
+        btnErrOk.setBounds(130, 63, 75, 25);
+        formToolkit.adapt(btnErrOk, true, true);
+        btnErrOk.setText("ok");
 
-        lblTexthere = new Label(grpErrorMesage, SWT.CENTER);
-        lblTexthere.setAlignment(SWT.CENTER);
-        lblTexthere.setBounds(76, 18, 180, 39);
-        formToolkit.adapt(lblTexthere, true, true);
-        lblTexthere.setText("texthere");
+
+        lblerrTexthere = new Label(grpErrorMesage, SWT.CENTER);
+        lblerrTexthere.setAlignment(SWT.CENTER);
+        lblerrTexthere.setBounds(76, 18, 180, 39);
+        formToolkit.adapt(lblerrTexthere, true, true);
+        lblerrTexthere.setText("texthere");
 
         Label lblErrorImage = new Label(grpErrorMesage, SWT.NONE);
         lblErrorImage.setImage(SWTResourceManager.getImage(MainUI.class, "/images/error big.png"));
         lblErrorImage.setBounds(10, 18, 64, 70);
         formToolkit.adapt(lblErrorImage, true, true);
+        
+        /* NOTIFICATION MESSAGE FIELD GROUP */
+        grpNotificationMesage = new Group(shell, SWT.NONE);
+        grpNotificationMesage.setText("notification");
+        grpNotificationMesage.setLayout(null);
+        FormData fd_grpNotificationMesage = new FormData();
+        fd_grpNotificationMesage.height = 80;
+        fd_grpNotificationMesage.width = 260;
+        fd_grpNotificationMesage.top = new FormAttachment(0, 120);
+        fd_grpNotificationMesage.left = new FormAttachment(0, 165);
+        grpNotificationMesage.setLayoutData(fd_grpNotificationMesage);
+        formToolkit.adapt(grpNotificationMesage);
+        formToolkit.paintBordersFor(grpNotificationMesage);
+
+        Button btnNotificationOk = new Button(grpNotificationMesage, SWT.NONE);
+        btnNotificationOk.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                ac.notificationClose();
+            }
+        });
+        btnNotificationOk.setBounds(130, 63, 75, 25);
+        formToolkit.adapt(btnNotificationOk, true, true);
+        btnNotificationOk.setText("ok");
+
+        lblNotificationTexthere = new Label(grpNotificationMesage, SWT.CENTER);
+        lblNotificationTexthere.setAlignment(SWT.CENTER);
+        lblNotificationTexthere.setBounds(76, 18, 180, 39);
+        formToolkit.adapt(lblNotificationTexthere, true, true);
+        lblNotificationTexthere.setText("texthere");
+
+        Label lblNotificationImage = new Label(grpNotificationMesage, SWT.NONE);
+        lblNotificationImage.setImage(SWTResourceManager.getImage(MainUI.class, "/images/notification big.png"));
+        lblNotificationImage.setBounds(10, 18, 64, 70);
+        formToolkit.adapt(lblNotificationImage, true, true);
 
         /* ABOUT FIELD GROUP */
         grpProgramInfo = new Group(shell, SWT.SHADOW_ETCHED_IN);
@@ -275,7 +317,7 @@ public class MainUI {
         lblAutorOleksandSymonenko = new Label(grpProgramInfo, SWT.NONE);
         lblAutorOleksandSymonenko.setBounds(10, 21, 200, 15);
         formToolkit.adapt(lblAutorOleksandSymonenko, true, true);
-        lblAutorOleksandSymonenko.setText("autor: Oleksand Symonenko");
+        lblAutorOleksandSymonenko.setText("autor: Oleksandr Symonenko");
 
         lblNoRights = new Label(grpProgramInfo, SWT.NONE);
         lblNoRights.setBounds(10, 93, 200, 15);
@@ -620,7 +662,10 @@ public class MainUI {
         grpAddEditTask.setVisible(false);
         grpErrorMesage.setVisible(false);
         mntmEdit.setEnabled(false);
+        grpNotificationMesage.setVisible(false);
     }
+
+    /* getters / setters */
 
     public static MainUI getMui() {
         return mui;
@@ -726,11 +771,27 @@ public class MainUI {
         return grpErrorMesage;
     }
 
-    public Label getLblTexthere() {
-        return lblTexthere;
+    public Label getlblerrTexthere() {
+        return lblerrTexthere;
     }
 
-    public static Logger getLogger() {
-        return logger;
+    public Group getGrpNotificationMesage() {
+        return grpNotificationMesage;
+    }
+
+    public Label getLblNotificationTexthere() {
+        return lblNotificationTexthere;
+    }
+
+    public void setLblNotificationTexthere(Label lblNotificationTexthere) {
+        this.lblNotificationTexthere = lblNotificationTexthere;
+    }
+
+    public static AppController getAc() {
+        return ac;
+    }
+
+    public Shell getShell() {
+        return shell;
     }
 }
